@@ -2,7 +2,7 @@ import NoteCard from "./NoteCard.jsx";
 import { useState } from "react";
 
 function Notes() {
-  const [notes] = useState([
+  const [notes, setNotes] = useState([
     {
       id: 1,
       title: "Review map and filter",
@@ -14,6 +14,19 @@ function Notes() {
       body: "Practice writing one handler for many inputs.",
     },
   ]);
+
+  function handleAddNote(e) {
+    e.preventDefault();
+     const title = newNotes.title.trim()
+     const body = newNotes.body.trim()
+    if (title === '' || body === '') {
+      return
+    }
+
+    const newNote = { id: crypto.randomUUID(), title, body }
+    setNotes((prev) => [...prev, newNote])
+    setNewNotes({ title: "", body: "" })
+}
 
   const [searchTerm, setSearchTerm] = useState("");
   const [newNotes, setNewNotes] = useState(
@@ -50,7 +63,7 @@ function Notes() {
             className="h-[52px] w-full border border-[#e6e6e6] px-4 text-lg outline-none placeholder:text-black/40 placeholder:italic focus:border-[#cf7d7d]"
           />
         </div>
-        <form className="grid gap-3">
+        <form className="grid gap-3" onSubmit={handleAddNote}>
           <p className="text-[13px] font-normal tracking-wide text-[#949494]">
             NEW NOTE
           </p>

@@ -2,48 +2,34 @@ import NoteCard from "./NoteCard.jsx";
 import { useState } from "react";
 
 function Notes() {
-  const [notes, setNotes] = useState([
-    {
-      id: 1,
-      title: "Review map and filter",
-      body: "Redo the TodoMVC steps without looking at the guide.",
-    },
-    {
-      id: 2,
-      title: "Prepare for the quiz",
-      body: "Practice writing one handler for many inputs.",
-    },
-  ]);
+  const [notes, setNotes] = useState([]);
 
   function handleAddNote(e) {
     e.preventDefault();
-     const title = newNotes.title.trim()
-     const body = newNotes.body.trim()
-    if (title === '' || body === '') {
-      return
+    const title = newNotes.title.trim();
+    const body = newNotes.body.trim();
+    if (title === "" || body === "") {
+      return;
     }
 
-    const newNote = { id: crypto.randomUUID(), title, body }
-    setNotes((prev) => [...prev, newNote])
-    setNewNotes({ title: "", body: "" })
-}
+    const newNote = { id: crypto.randomUUID(), title, body };
+    setNotes((prev) => [...prev, newNote]);
+    setNewNotes({ title: "", body: "" });
+  }
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [newNotes, setNewNotes] = useState(
-    {
-      title: "",
-      body: "",
-    }
-  );
+  const [newNotes, setNewNotes] = useState({
+    title: "",
+    body: "",
+  });
 
   function handleInputChange(e) {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
     setNewNotes((prev) => ({
       ...prev,
       [name]: value,
     }));
-  } 
-    
+  }
 
   return (
     <div className="grid min-h-screen grid-cols-[420px_1fr]">
@@ -101,13 +87,18 @@ function Notes() {
               <button
                 type="button"
                 className="absolute top-4 right-5 cursor-pointer text-[26px] leading-none text-[#949494] hover:text-[#c18585]"
-                onClick={() => setNotes((prev) => prev.filter((n) => n.id !== note.id))}
+                onClick={() =>
+                  setNotes((prev) => prev.filter((n) => n.id !== note.id))
+                }
               >
                 ×
               </button>
             </li>
           ))}
         </ul>
+        {notes.length === 0 && (
+          <p className="text-lg text-[#949494]">No notes found</p>
+        )}
       </section>
     </div>
   );

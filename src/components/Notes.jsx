@@ -35,10 +35,13 @@ export default function Notes() {
   }
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [newNotes, setNewNotes] = useState({
-    title: "",
-    body: "",
+
+  const [newNotes, setNewNotes] = useState(() => {
+    const savedDraft = localStorage.getItem("draft");
+
+    return savedDraft ? JSON.parse(savedDraft) : { title: "", body: "" };
   });
+
   const titleRef = useRef(null);
 
   useEffect(() => {
@@ -46,7 +49,7 @@ export default function Notes() {
   }, [notes]);
 
   useEffect(() => {
-    const id =setTimeout(() => {
+    const id = setTimeout(() => {
       localStorage.setItem("draft", JSON.stringify(newNotes));
     }, 1000);
     return () => clearTimeout(id);
@@ -63,16 +66,19 @@ export default function Notes() {
   function handleSearchChange(e) {
     setSearchTerm(e.target.value);
   }
-  
+
   const visibleNotes = useMemo(() => {
     return notes.filter((note) =>
-      note.title.toLowerCase().includes(searchTerm.toLowerCase())
+      note.title.toLowerCase().includes(searchTerm.toLowerCase()),
     );
   }, [notes, searchTerm]);
 
-  const handleDeleteNote = useCallback((id) => {
-    setNotes((prev) => prev.filter((note) => note.id !== id));
-  }, [notes]);
+  const handleDeleteNote = useCallback(
+    (id) => {
+      setNotes((prev) => prev.filter((note) => note.id !== id));
+    },
+    [],
+  );
 
   return (
     <div className="grid min-h-screen grid-cols-[420px_1fr]">
@@ -127,7 +133,12 @@ export default function Notes() {
               key={note.id}
               className="relative rounded-lg bg-white p-6 shadow-[0_2px_4px_0_rgba(0,0,0,0.2),0_25px_50px_0_rgba(0,0,0,0.1)]"
             >
-              <NoteCard id={note.id} title={note.title} body={note.body} onDelete={handleDeleteNote} />
+              <NoteCard
+                id={note.id}
+                title={note.title}
+                body={note.body}
+                onDelete={handleDeleteNote}
+              />
             </li>
           ))}
         </ul>

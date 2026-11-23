@@ -1,5 +1,5 @@
 import NoteCard from "./NoteCard.jsx";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 
 const startingNotes = [
   {
@@ -63,10 +63,12 @@ export default function Notes() {
   function handleSearchChange(e) {
     setSearchTerm(e.target.value);
   }
-
-  const visibleNotes = notes.filter((note) =>
-    note.title.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  
+  const visibleNotes = useMemo(() => {
+    return notes.filter((note) =>
+      note.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [notes, searchTerm]);
 
   return (
     <div className="grid min-h-screen grid-cols-[420px_1fr]">

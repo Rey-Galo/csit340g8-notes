@@ -1,7 +1,7 @@
 import NoteCard from "./NoteCard.jsx";
 import { useState, useEffect } from "react";
 
-const defaultNotes = [
+const startingNotes = [
   {
     id: "1",
     title: "Review map and filter",
@@ -15,11 +15,10 @@ const defaultNotes = [
 ];
 
 export default function Notes() {
-  const [notes, setNotes] = useState(defaultNotes);
-
-  useEffect(() => {
-    localStorage.setItem("notes", JSON.stringify(notes));
-  }, [notes]);
+  const [notes, setNotes] = useState(() => {
+    const saved = localStorage.getItem("notes");
+    return saved ? JSON.parse(saved) : startingNotes;
+  });
 
   function handleAddNote(e) {
     e.preventDefault();
@@ -39,6 +38,10 @@ export default function Notes() {
     title: "",
     body: "",
   });
+
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
 
   function handleInputChange(e) {
     const { name, value } = e.target;

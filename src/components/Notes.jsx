@@ -1,5 +1,5 @@
 import NoteCard from "./NoteCard.jsx";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const startingNotes = [
   {
@@ -31,6 +31,7 @@ export default function Notes() {
     const newNote = { id: crypto.randomUUID(), title, body };
     setNotes((prev) => [...prev, newNote]);
     setNewNotes({ title: "", body: "" });
+    titleRef.current.focus();
   }
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,6 +39,7 @@ export default function Notes() {
     title: "",
     body: "",
   });
+  const titleRef = useRef(null);
 
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
@@ -89,6 +91,7 @@ export default function Notes() {
             NEW NOTE
           </p>
           <input
+            ref={titleRef}
             value={newNotes.title}
             onChange={handleInputChange}
             name="title"

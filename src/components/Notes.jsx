@@ -1,8 +1,25 @@
 import NoteCard from "./NoteCard.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function Notes() {
-  const [notes, setNotes] = useState([]);
+const defaultNotes = [
+  {
+    id: "1",
+    title: "Review map and filter",
+    body: "Redo the TodoMVC steps without looking at the guide.",
+  },
+  {
+    id: "2",
+    title: "Prepare for the quiz",
+    body: "Practice writing one handler for many inputs.",
+  },
+];
+
+export default function Notes() {
+  const [notes, setNotes] = useState(defaultNotes);
+
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
 
   function handleAddNote(e) {
     e.preventDefault();
@@ -36,7 +53,7 @@ function Notes() {
   }
 
   const visibleNotes = notes.filter((note) =>
-    note.title.toLowerCase().includes(searchTerm.toLowerCase())
+    note.title.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
@@ -111,5 +128,3 @@ function Notes() {
     </div>
   );
 }
-
-export default Notes;

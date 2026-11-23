@@ -43,6 +43,13 @@ export default function Notes() {
     localStorage.setItem("notes", JSON.stringify(notes));
   }, [notes]);
 
+  useEffect(() => {
+    const id =setTimeout(() => {
+      localStorage.setItem("draft", JSON.stringify(newNotes));
+    }, 1000);
+    return () => clearTimeout(id);
+  }, [newNotes]);
+
   function handleInputChange(e) {
     const { name, value } = e.target;
     setNewNotes((prev) => ({

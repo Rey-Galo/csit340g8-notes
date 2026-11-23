@@ -1,5 +1,5 @@
 import NoteCard from "./NoteCard.jsx";
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 
 const startingNotes = [
   {
@@ -70,6 +70,10 @@ export default function Notes() {
     );
   }, [notes, searchTerm]);
 
+  const handleDeleteNote = useCallback((id) => {
+    setNotes((prev) => prev.filter((note) => note.id !== id));
+  }, [notes]);
+
   return (
     <div className="grid min-h-screen grid-cols-[420px_1fr]">
       <aside className="sticky top-0 flex h-screen flex-col gap-5 bg-white px-8 py-9 shadow-[0_2px_4px_0_rgba(0,0,0,0.2),0_25px_50px_0_rgba(0,0,0,0.1)]">
@@ -123,16 +127,7 @@ export default function Notes() {
               key={note.id}
               className="relative rounded-lg bg-white p-6 shadow-[0_2px_4px_0_rgba(0,0,0,0.2),0_25px_50px_0_rgba(0,0,0,0.1)]"
             >
-              <NoteCard title={note.title} body={note.body} />
-              <button
-                type="button"
-                className="absolute top-4 right-5 cursor-pointer text-[26px] leading-none text-[#949494] hover:text-[#c18585]"
-                onClick={() =>
-                  setNotes((prev) => prev.filter((n) => n.id !== note.id))
-                }
-              >
-                ×
-              </button>
+              <NoteCard id={note.id} title={note.title} body={note.body} onDelete={handleDeleteNote} />
             </li>
           ))}
         </ul>

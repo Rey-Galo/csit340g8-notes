@@ -1,15 +1,29 @@
-
-
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { SettingsContext } from "../SettingsContext.js";
 
 function NoteCard({ title, body }) {
   const [isOpen, setIsOpen] = useState(false);
+  const { largeText } = useContext(SettingsContext);
 
   return (
     <div>
-      <h3 className="pr-8 text-[22px] font-normal break-words">{title}</h3>
+      <h3
+        className={
+          largeText
+            ? "pr-8 text-[28px] font-normal break-words"
+            : "pr-8 text-[22px] font-normal break-words"
+        }
+      >
+        {title}
+      </h3>
       {isOpen && (
-        <p className="mt-3 text-[17px] break-words whitespace-pre-wrap text-[#4d4d4d]">
+        <p
+          className={
+            largeText
+              ? "mt-3 text-[21px] break-words whitespace-pre-wrap text-[#4d4d4d]"
+              : "mt-3 text-[17px] break-words whitespace-pre-wrap text-[#4d4d4d]"
+          }
+        >
           {body}
         </p>
       )}
@@ -22,7 +36,7 @@ function NoteCard({ title, body }) {
         {isOpen ? "Show less" : "Show more"}
       </button>
     </div>
-  )
+  );
 }
- 
-export default NoteCard
+
+export default NoteCard;
